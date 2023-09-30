@@ -1,11 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, TurbineData } from "@prisma/client";
-import multer from 'multer';
-import { IncomingForm } from 'formidable';
+import { parse } from 'querystring';
 
 const prisma = new PrismaClient();
 
-const upload = multer({ dest: 'uploads/' });
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '10mb', // you can set the size limit for the body parser here
+        },
+    },
+};
+
+
 
 async function getFirst10TurbineData(): Promise<TurbineData[]> {
     try {
@@ -25,11 +32,14 @@ async function getFirst10TurbineData(): Promise<TurbineData[]> {
     }
 }
 
-export const config = {
+export const apiConfig = {
     api: {
-        bodyParser: false,
+        bodyParser: {
+            sizeLimit: '10mb', // you can set the size limit for the body parser here
+        },
     },
 };
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
@@ -40,14 +50,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.status(500).json({ error: "Internal server error" });
         }
     } else if (req.method === "POST") {
-        const form = new IncomingForm();
-        form.parse(req, (err, fields, files) => {
-            if (err) {
-                return res.status(400).json({ error: "Invalid request" });
-            }
-            // TODO: Handle the uploaded files, maybe save them in your database, etc.
-            res.status(200).json({ success: true, message: "File uploaded successfully" });
-        });
+        const buffer = await req.body;
+        const text = buffer.toString();
+        const parsed = parse(text);
+        // TODO: Handle the uploaded files, maybe save them in your database, etc.
+        res.status(200).json({ success: true, message: "File uploaded successfully" });
     } else {
         res.status(405).json({ error: "Method not allowed" });
     }
