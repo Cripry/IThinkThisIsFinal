@@ -70,6 +70,7 @@ const About: React.FC = (props) => {
       });
 
       const data = await response.json();
+      console.log(data);
       if (data.success) {
         alert('File uploaded successfully.');
         setFiles([]);

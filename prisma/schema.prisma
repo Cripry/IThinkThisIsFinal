@@ -10,22 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model TurbineData{
-  record_time DateTime @unique @default(now()) 
-  wind_speed Float
-  rotor_speed Float
-  active_power_awg Float
-  nacelle_position Float
-  feature_1 Float
-  feature_3 Float
-  feature_7 Float
-  feature_28 Float  
-  day_sin Float
-  day_cos Float
-  year_sin Float
-  year_cos Float
-  hour_sin Float
-  hours_cos Float
-  minute_sin Float
-  minute_cos Float
+model WindTurbineData {
+  id                 Int       @id @default(autoincrement())
+  WindSpeedAvg       Float
+  RotorSpeedRpmAvg   Float
+  ActivePowerAvg     Float
+  NacellePositionAvg Float
+  Feature1           Float
+  Feature3           Float
+  Feature7           Float
+  Feature28          Float
+  DaySin             Float
+  DayCos             Float
+  YearSin            Float
+  YearCos            Float
+  HourSin            Float
+  HourCos            Float
+  MinuteSin          Float
+  MinuteCos          Float
 }
