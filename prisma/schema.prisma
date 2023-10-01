@@ -10,8 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model WindTurbineData {
-  id                 Int       @id @default(autoincrement())
+model TurbineData {
+  id                 Int   @id @default(autoincrement())
   WindSpeedAvg       Float
   RotorSpeedRpmAvg   Float
   ActivePowerAvg     Float

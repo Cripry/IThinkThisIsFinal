@@ -23,6 +23,8 @@ def preprocess(df):
         # Make a copy of the input DataFrame
         df = df.copy()
 
+        print(df.head(3))
+
         # Combine 'Datum (Anlage)' and 'Zeit (Anlage)' columns into a single 'DateTime' column and drop the original columns
         df['DateTime'] = pd.to_datetime(df['Datum (Anlage)'] + ' ' + df['Zeit (Anlage)'],
                                         format='%d.%m.%y %H:%M:%S')
@@ -123,10 +125,10 @@ def save_to_database(df, cursor):
     ) for _, row in df.iterrows()]
 
     insert_query = """
-        INSERT INTO "WindTurbineData" (
-            WindSpeedAvg, RotorSpeedRpmAvg, ActivePowerAvg, NacellePositionAvg, 
-            Feature1, Feature3, Feature7, Feature28, DaySin, DayCos, 
-            YearSin, YearCos, HourSin, HourCos, MinuteSin, MinuteCos
+        INSERT INTO "TurbineData" (
+            "WindSpeedAvg", "RotorSpeedRpmAvg", "ActivePowerAvg", "NacellePositionAvg", 
+            "Feature1", "Feature3", "Feature7", "Feature28", "DaySin", "DayCos", 
+            "YearSin", "YearCos", "HourSin", "HourCos", "MinuteSin", "MinuteCos"
         ) VALUES %s
         ON CONFLICT (id) DO NOTHING
     """
@@ -143,7 +145,7 @@ def process_uploaded_file(file_path):
     )
     cursor = connection.cursor()
 
-    for chunk in pd.read_csv(file_path, on_bad_lines='skip', low_memory=False, delimiter=";", chunksize=CHUNK_SIZE):
+    for chunk in pd.read_csv(file_path, on_bad_lines='skip', low_memory=False, delimiter=";",skiprows=3, index_col=0, chunksize=CHUNK_SIZE):
         df = preprocess(chunk)
         save_to_database(df, cursor)
 

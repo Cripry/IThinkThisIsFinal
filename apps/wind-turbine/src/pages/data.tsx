@@ -3,23 +3,24 @@ import { Container, Table, TableBody, TableCell, TableHead, TableRow, Paper } fr
 import { format } from 'date-fns';
 
 interface ITableData {
-  record_time: string;
-  wind_speed: number;
-  rotor_speed: number;
-  active_power_awg: number;
-  nacelle_position: number;
-  feature_1: number;
-  feature_3: number;
-  feature_7: number;
-  feature_28: number;
-  day_sin: number;
-  day_cos: number;
-  year_sin: number;
-  year_cos: number;
-  hour_sin: number;
-  hours_cos: number;
-  minute_sin: number;
-  minute_cos: number;
+  id: number;
+  RotorSpeedRpmAvg: number;
+  WindSpeedAvg: number;
+  ActivePowerAvg: number;
+  NacellePositionAvg: number;
+  Feature1: number;
+  Feature3: number;
+  Feature7: number;
+  Feature28: number;
+  DaySin: number;
+  DayCos: number;
+  YearSin: number;
+  YearCos: number;
+  HourSin: number;
+  HourCos: number;
+  MinuteSin: number;
+  MinuteCos: number;
+
 }
 
 const getData = async (): Promise<ITableData[]> => {
@@ -99,11 +100,14 @@ const About: React.FC = (props) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Record Time</TableCell>
-              <TableCell>Wind Speed</TableCell>
-              <TableCell>Rotor Speed</TableCell>
+              <TableCell>Rotor Speed</TableCell> 
+              <TableCell>Wind Speed</TableCell>  
               <TableCell>Active Power</TableCell>
               <TableCell>Nacelle Position</TableCell>
+              <TableCell>Feature 1</TableCell>
+              <TableCell>Feature 3</TableCell>
+              <TableCell>Feature 7</TableCell>
+              <TableCell>Feature 28</TableCell>
               <TableCell>Day Sin</TableCell>
               <TableCell>Day Cos</TableCell>
               <TableCell>Year Sin</TableCell>
@@ -117,19 +121,22 @@ const About: React.FC = (props) => {
           <TableBody>
             {tableData.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>{format(new Date(item.record_time), 'dd-MM-yyyy HH:mm')}</TableCell>
-                <TableCell>{item.wind_speed}</TableCell>
-                <TableCell>{item.rotor_speed}</TableCell>
-                <TableCell>{item.active_power_awg}</TableCell>
-                <TableCell>{item.nacelle_position}</TableCell>
-                <TableCell>{item.day_sin}</TableCell>
-                <TableCell>{item.day_cos}</TableCell>
-                <TableCell>{item.year_sin}</TableCell>
-                <TableCell>{item.year_cos}</TableCell>
-                <TableCell>{item.hour_sin}</TableCell>
-                <TableCell>{item.hours_cos}</TableCell>
-                <TableCell>{item.minute_sin}</TableCell>
-                <TableCell>{item.minute_cos}</TableCell>
+                <TableCell>{item.RotorSpeedRpmAvg.toFixed(2)}</TableCell>
+                <TableCell>{item.WindSpeedAvg.toFixed(2)}</TableCell>
+                <TableCell>{item.ActivePowerAvg.toFixed(2)}</TableCell>
+                <TableCell>{item.NacellePositionAvg.toFixed(2)}</TableCell>
+                <TableCell>{item.Feature1.toFixed(2)}</TableCell>
+                <TableCell>{item.Feature3.toFixed(2)}</TableCell>
+                <TableCell>{item.Feature7.toFixed(2)}</TableCell>
+                <TableCell>{item.Feature28.toFixed(2)}</TableCell>
+                <TableCell>{item.DaySin.toFixed(2)}</TableCell>
+                <TableCell>{item.DayCos.toFixed(2)}</TableCell>
+                <TableCell>{item.YearSin.toFixed(2)}</TableCell>
+                <TableCell>{item.YearCos.toFixed(2)}</TableCell>
+                <TableCell>{item.HourSin.toFixed(2)}</TableCell>
+                <TableCell>{item.HourCos.toFixed(2)}</TableCell>
+                <TableCell>{item.MinuteSin.toFixed(2)}</TableCell>
+                <TableCell>{item.MinuteCos.toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -8,7 +8,7 @@ async function getFirst10TurbineData(): Promise<TurbineData[]> {
     const categories = await prisma.turbineData.findMany({
       take: 10,
       orderBy: {
-        record_time: 'desc'
+        id: 'desc'
       }
     });
 

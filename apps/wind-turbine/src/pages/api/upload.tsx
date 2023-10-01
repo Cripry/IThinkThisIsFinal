@@ -4,6 +4,8 @@ import { parse } from 'querystring';
 import { v4 as uuidv4 } from 'uuid'; // Add this line
 import fs from 'fs'; // Add this line
 import path from 'path'; // Add this line
+import { exec } from 'child_process';
+
 
 const prisma = new PrismaClient();
 
@@ -20,7 +22,7 @@ async function getFirst10TurbineData(): Promise<TurbineData[]> {
         const categories = await prisma.turbineData.findMany({
             take: 10,
             orderBy: {
-                record_time: 'desc'
+                id: 'desc'
             }
         });
 
@@ -35,14 +37,8 @@ async function getFirst10TurbineData(): Promise<TurbineData[]> {
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    console.log("Handler Triggered");  // Add this line
     if (req.method === "GET") {
-        try {
-            const data = await getFirst10TurbineData();
-            res.status(200).json(data);
-        } catch (error) {
-            res.status(500).json({ error: "Internal server error" });
-        }
+        // ... (no changes here)
     } else if (req.method === "POST") {
         const data: any = [];
         req.on('data', chunk => {
@@ -50,20 +46,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         req.on('end', () => {
             const buffer = Buffer.concat(data);
-
-            // Generate a unique file name with uuid
             const fileUuid = uuidv4();
-            const fileExtension = '.txt'; // Replace this with logic to get the actual file extension
+            const fileExtension = '.csv';  // Changed to CSV as that is likely what you are working with
             const fileName = `${fileUuid}${fileExtension}`;
-
-            const uploadPath = path.join(process.cwd(),'uploads', fileName);
+            const uploadPath = path.join(process.cwd(), 'uploads', fileName);
 
             fs.writeFile(uploadPath, buffer, (err) => {
                 if (err) {
-                    console.error('Error writing file:', err);  // Log the error
+                    console.error('Error writing file:', err);
                     return res.status(500).json({ success: false, message: 'Failed to write file' });
                 }
-                res.status(200).json({ success: true, message: 'File uploaded successfully' });
+
+                // Remove boundary string
+                let fileContent = fs.readFileSync(uploadPath, 'utf-8');
+                fileContent = fileContent.replace(/------WebKitFormBoundary[a-zA-Z0-9]*--/g, '');
+                fs.writeFileSync(uploadPath, fileContent);
+
+                // Run Python script
+                exec(`python src/scripts/data_processor.py ${uploadPath}`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.error(`Python script execution error: ${error}`);
+                        return res.status(500).json({ success: false, message: 'Python script failed' });
+                    }
+                    // ... (no changes here)
+                    res.status(200).json({ success: true, message: 'File uploaded and processed successfully' });
+                });
             });
         });
     } else {
