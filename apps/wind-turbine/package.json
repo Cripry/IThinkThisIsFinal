@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate": "prisma migrate deploy"
   },
   "dependencies": {
     "mini-css-extract-plugin": "^2.7.6",

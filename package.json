@@ -4,7 +4,8 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "migrate": "prisma migrate deploy"
   },
   "devDependencies": {
     "eslint": "^8.48.0",
@@ -25,12 +26,16 @@
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
     "@mui/styled-engine-sc": "^5.14.11",
+    "@mui/x-charts": "^6.0.0-alpha.13",
     "@prisma/client": "^5.3.1",
     "@types/react-router-dom": "^5.3.3",
+    "chart.js": "^4.4.0",
     "child_process": "^1.0.2",
     "date-fns": "^2.30.0",
     "mini-css-extract-plugin": "^2.7.6",
     "next": "^13.5.3",
+    "next-transpile-modules": "^10.0.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dropzone": "^14.2.3",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.16.0",

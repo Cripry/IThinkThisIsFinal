@@ -23,14 +23,15 @@ interface ITableData {
 
 }
 
-const getData = async (): Promise<ITableData[]> => {
-  const res = await fetch("http://localhost:3000/api/data", {
-    cache: "no-store"
+const getData = async (take: number = 10): Promise<ITableData[]> => {  // Default value is 10
+  const res = await fetch(`http://localhost:3000/api/data?take=${take}`, { // Use template literal to include 'take'
+    cache: "no-store",
   });
 
   if (!res.ok) {
     throw new Error("Failed!");
   }
+
   return res.json();
 }
 
@@ -50,6 +51,7 @@ const About: React.FC = (props) => {
 
     fetchData();
   }, []);
+  
   const handleFilesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = event.target.files;
     if (newFiles && newFiles.length > 0) {
@@ -100,8 +102,8 @@ const About: React.FC = (props) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Rotor Speed</TableCell> 
-              <TableCell>Wind Speed</TableCell>  
+              <TableCell>Rotor Speed</TableCell>
+              <TableCell>Wind Speed</TableCell>
               <TableCell>Active Power</TableCell>
               <TableCell>Nacelle Position</TableCell>
               <TableCell>Feature 1</TableCell>

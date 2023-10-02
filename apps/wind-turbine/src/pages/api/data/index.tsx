@@ -3,10 +3,10 @@ import { PrismaClient, TurbineData } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function getFirst10TurbineData(): Promise<TurbineData[]> {
+async function getTurbineData(take: number): Promise<TurbineData[]> {
   try {
     const categories = await prisma.turbineData.findMany({
-      take: 10,
+      take,  // replaced hard-coded '10' with the parameter 'take'
       orderBy: {
         id: 'desc'
       }
@@ -23,8 +23,10 @@ async function getFirst10TurbineData(): Promise<TurbineData[]> {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
+    const take = parseInt(req.query.take as string) || 10;  // if 'take' is not provided, default to 10
+
     try {
-      const data = await getFirst10TurbineData();
+      const data = await getTurbineData(take);
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });

@@ -1,5 +1,5 @@
+version: "3.8"
 services:
-
   db:
     image: postgres
     restart: always
@@ -9,3 +9,19 @@ services:
       POSTGRES_DB: mydb
     ports:
       - 5432:5432
+  
+  flask_app:
+    build: ../apps/flask_api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../apps/flask_api:/app
+    command: bash -c "env\Scripts\activate.bat && python app.py"
+  
+  next_app:
+    build: ../apps/wind-turbine
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../apps/wind-turbine:/app
+    command: /bin/sh -c "npm install"
