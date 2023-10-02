@@ -7,8 +7,8 @@ services:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydb
-    ports:
-      - 5432:5432
+    networks:
+      - mynetwork
   
   flask_app:
     build: ../apps/flask_api
@@ -16,7 +16,13 @@ services:
       - "5000:5000"
     volumes:
       - ../apps/flask_api:/app
-    command: bash -c "env\Scripts\activate.bat && python app.py"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://myuser:mypassword@db:5432/mydb"
+    networks:
+      - mynetwork
+    command: bash -c "pip install --no-cache-dir -r requirements.txt && python3.9 app.py"
   
   next_app:
     build: ../apps/wind-turbine
@@ -24,4 +30,13 @@ services:
       - "3000:3000"
     volumes:
       - ../apps/wind-turbine:/app
-    command: /bin/sh -c "npm install"
+    depends_on:
+      - flask_app
+    networks:
+      - mynetwork
+    environment:
+      DATABASE_URL: "postgresql://myuser:mypassword@db:5432/mydb"
+    command: /bin/sh -c "npm install && npm install next-transpile-modules && npm run dev"
+
+networks:
+  mynetwork:
