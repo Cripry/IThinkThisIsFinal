@@ -47,7 +47,7 @@ const getActivePowerAvgDataPast = async (take: number = 96): Promise<number[]> =
 };
 
 const getDataFuture = async (): Promise<IPredictFutureResponse[]> => {
-    const res = await fetch(`http://127.0.0.1:5000/predict_future`, {
+    const res = await fetch(`http://flask_app:5000/predict_future`, {
         cache: "no-store",
         mode: 'cors',
         method: 'GET',

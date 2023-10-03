@@ -12,9 +12,14 @@ CORS(app)
 
 load_dotenv()
 
+print("IM hereeeeee --------------------------------------------------------")
+
+print(os.getcwd())
+print(f"Curent directories: {os.listdir()}")
+
 # Initialize your model
-pipeline = WindTurbinePipeline(model_weights_path=r'apps\flask_api\model\model.keras',
-                                scaler=r'apps\flask_api\scaler\scaler_filename.pkl')
+pipeline = WindTurbinePipeline(model_weights_path=r'./model/model.keras',
+                                scaler=r'./scaler/scaler_filename.pkl')
 # Initialize DB connection
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
@@ -39,6 +44,7 @@ feature_name_mapping = {
     'MinuteCos': 'minute cos'
 }
 
+print("Server is runnning !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!@")
 
 
 @app.route('/train', methods=['POST'])
@@ -89,4 +95,4 @@ def predict_future():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

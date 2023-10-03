@@ -1,7 +1,10 @@
-/** @type {import('next').NextConfig} */
-const withTM = require('next-transpile-modules')(['@mui/x-charts']);
-const nextConfig = {}
+const path = require("path");
 
-module.exports = withTM({
-    // Your Next.js config
-});
+module.exports = {
+    reactStrictMode: true,
+    transpilePackages: ["ui"],
+    output: "standalone",
+    experimental: {
+        outputFileTracingRoot: path.join(__dirname, "../../"),
+    },
+};
